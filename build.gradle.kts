@@ -11,6 +11,7 @@ group = "mod_group_id"()
 repositories {
     mavenLocal()
     maven("https://cursemaven.com")
+    maven("https://api.modrinth.com/maven")
 }
 
 base.archivesName = "mod_id"()
@@ -75,7 +76,10 @@ neoForge {
 sourceSets.main.get().resources { srcDir("src/generated/resources") }
 
 dependencies {
-    implementation("curse.maven:customizable-player-models-439870:6787917")
+
+    //implementation("maven.modrinth:ldlib:mc1.21.1-2.1.7-neoforge")
+    //compileOnly("org.appliedenergistics.yoga:yoga:1.0.0")
+
 }
 
 val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
@@ -129,6 +133,7 @@ publishing {
                     password = passP
                 }
             }
+
         }
     }
 }

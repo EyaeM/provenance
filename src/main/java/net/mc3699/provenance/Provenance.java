@@ -1,6 +1,5 @@
 package net.mc3699.provenance;
 
-import net.mc3699.provenance.cpm.ProvCPM;
 import net.mc3699.provenance.registry.ProvAbilities;
 import net.mc3699.provenance.registry.ProvArchetypes;
 import net.mc3699.provenance.util.ProvScheduler;
@@ -20,19 +19,12 @@ public class Provenance {
         ProvAbilities.register(modEventBus);
         ProvArchetypes.register(modEventBus);
         modEventBus.addListener(this::registerRegistries);
-        modEventBus.addListener(this::enqueueIMC);
-
     }
 
     private void registerRegistries(NewRegistryEvent event)
     {
         event.register(ProvenanceRegistries.ABILITY_REGISTRY);
         event.register(ProvenanceRegistries.ARCHETYPE_REGISTRY);
-    }
-
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
-        InterModComms.sendTo("cpm", "api", () -> (Supplier<?>) ProvCPM::new);
     }
 
 }

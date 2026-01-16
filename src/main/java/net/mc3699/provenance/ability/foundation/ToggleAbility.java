@@ -1,24 +1,29 @@
 package net.mc3699.provenance.ability.foundation;
 
 import net.mc3699.provenance.ProvenanceDataHandler;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 public abstract class ToggleAbility extends BaseAbility {
 
-    private boolean enabled = false;
-
     public void tick(ServerPlayer serverPlayer) {
-        ProvenanceDataHandler.changeAP(serverPlayer, -getUseCost());
-        if (ProvenanceDataHandler.getAP(serverPlayer) < getUseCost()) enabled = false;
+        float ap = ProvenanceDataHandler.getAP(serverPlayer);
+        if (ap >= getUseCost()) {
+            ProvenanceDataHandler.changeAP(serverPlayer, -getUseCost());
+        } else {
+            ResourceLocation id = ProvenanceDataHandler.getIdForAbility(serverPlayer, this);
+            if (id != null) {
+                setEnabled(serverPlayer, id, false);
+            }
+        }
     }
 
-    public boolean isEnabled(ServerPlayer player, int slot) {
-        return ProvenanceDataHandler.isAbilityEnabled(player, slot);
+
+    public boolean isEnabled(ServerPlayer player, ResourceLocation id) {
+        return ProvenanceDataHandler.isAbilityEnabled(player, id);
     }
 
-    public void setEnabled(ServerPlayer player, int slot, boolean enabled) {
-        ProvenanceDataHandler.setAbilityEnabled(player, slot, enabled);
+    public void setEnabled(ServerPlayer player, ResourceLocation id, boolean enabled) {
+        ProvenanceDataHandler.setAbilityEnabled(player, id, enabled);
     }
-
-
 }

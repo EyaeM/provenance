@@ -16,25 +16,28 @@ public class ProvNetworking {
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1.0");
 
-        // Client -> Server: Trigger ability in a slot
         registrar.playToServer(
                 TriggerAbilityPayload.TYPE,
                 TriggerAbilityPayload.STREAM_CODEC,
                 AbilityExecutor::runAbility
         );
 
-        // Server -> Client: Sync full ability data (NBT)
         registrar.playToClient(
                 AbilityDataSyncPayload.TYPE,
                 AbilityDataSyncPayload.CODEC,
                 ClientAbilityInfo::handle
         );
 
-        // Client -> Server: Request fresh ability data sync
         registrar.playToServer(
                 RequestDataSyncPayload.TYPE,
                 RequestDataSyncPayload.CODEC,
                 PlayerSyncHandler::handleSyncRequests
+        );
+
+        registrar.playToClient(
+                OpenScreenPayload.TYPE,
+                OpenScreenPayload.CODEC,
+                OpenScreenPayload::handle
         );
     }
 }

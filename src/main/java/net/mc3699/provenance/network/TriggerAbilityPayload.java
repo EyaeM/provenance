@@ -5,15 +5,16 @@ import net.mc3699.provenance.util.ProvConstants;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-public record TriggerAbilityPayload(int abilitySlot, boolean state) implements CustomPacketPayload {
+public record TriggerAbilityPayload(ResourceLocation abilityId, boolean state) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<TriggerAbilityPayload> TYPE =
             new CustomPacketPayload.Type<>(ProvConstants.path("trigger_ability"));
 
     public static final StreamCodec<ByteBuf, TriggerAbilityPayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT,
-            TriggerAbilityPayload::abilitySlot,
+            ResourceLocation.STREAM_CODEC,
+            TriggerAbilityPayload::abilityId,
             ByteBufCodecs.BOOL,
             TriggerAbilityPayload::state,
             TriggerAbilityPayload::new
