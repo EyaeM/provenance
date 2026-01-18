@@ -18,12 +18,28 @@ public abstract class ToggleAbility extends BaseAbility {
         }
     }
 
+    protected void onToggle(ServerPlayer player, boolean enabled) {}
+
 
     public boolean isEnabled(ServerPlayer player, ResourceLocation id) {
         return ProvenanceDataHandler.isAbilityEnabled(player, id);
     }
 
     public void setEnabled(ServerPlayer player, ResourceLocation id, boolean enabled) {
+        boolean prev = ProvenanceDataHandler.isAbilityEnabled(player, id);
         ProvenanceDataHandler.setAbilityEnabled(player, id, enabled);
+        if (prev != enabled) {
+            onToggle(player, enabled);
+        }
     }
+
+    protected final void disableSelf(ServerPlayer player) {
+        ResourceLocation id =
+                ProvenanceDataHandler.getIdForAbility(player, this);
+        if (id != null) {
+            setEnabled(player, id, false);
+        }
+    }
+
+
 }
